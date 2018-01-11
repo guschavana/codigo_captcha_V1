@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Verificacion Captcha</title>
+	<!-- CSS -->
+	<link rel="stylesheet" href="css/estilo.css">
+
+	<!-- SCRIPTS NECESARIOS-->
+	<script language="javascript" type="text/javascript">
+	//ESTA FUNCIÓN GENERA UN STRING DE 5 CARACTERES ALEATORIAMENTE
+		function generar_captcha(){
+			var codigo = '';
+			var diccionario = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+			for (var i=0; i<5; i++){
+				codigo += diccionario.charAt(Math.floor(Math.random() * diccionario.length));
+			}
+
+			//DIBUJAMOS EL TEXTO EN NUESTRO CANVAS
+			var txt = document.getElementById('txtCaptcha').getContext('2d');
+			txt.font = '80px Rock Salt, cursive';
+			txt.fillText(codigo, 20, 100);
+			document.getElementById("codigo_generado").value = codigo;
+		}
+	//ESTA FUNCION VERIFICA EL CAPTCHA CON EL INPUT DEL USUARIO	
+		function verificar(checkbox){
+			var texto = document.getElementById("texto").value;
+			var codigo = document.getElementById("codigo_generado").value;
+				if(checkbox.checked == true){
+					// SI EL TEXTO CON LA IMAGEN ES IGUAL
+					if(texto == codigo){
+						//AQUI MOSTRAMOS EL BOTON SUBMIT
+				        document.getElementById('ejecutar').style.display = 'block';
+				    }else{
+				    	//SI EL CODIGO ES INCORRECTO LE MANDAMOS UNA ALERTA AL USUARIO
+				    	alert('codigo incorrecto');
+				        checkbox.click();
+				   	}
+			   	}
+			   return false;
+			}
+	</script>
+</head>
+
+
+
+<body>
+
+	<form id="Captcha">
+	<canvas id ="txtCaptcha">
+	</canvas>
+	<textarea id="codigo_generado"></textarea>
+	<script type="text/javascript">generar_captcha();</script>
+	<br>
+	<input id = "texto">
+	<button id="recargar" onclick="generar_captcha();"><img src="img/refresh.png"/></button>
+	<br>
+	<!-- SI SE REQUIERE HACERLO CON UN BOTON -->
+	<!--<input type="button" value='Verificar' onclick="verificar()" />-->
+	<input type="checkbox" onchange='verificar(this);''>No soy un robot
+	<br>
+	<button id="ejecutar">Ejecutar</button>
+	</form>
+</body>
+</html>
